@@ -1,0 +1,13 @@
+node_modules/
+dist/
+release/
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+*.pfx
+.env*
+android/local.properties
+android/key.properties
+ios/App/Pods/
+*.log

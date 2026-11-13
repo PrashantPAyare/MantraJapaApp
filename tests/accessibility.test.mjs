@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';
+const css=await readFile('src/style.css','utf8');
+function contrast(a,b){const lum=c=>{const n=c.match(/[a-f0-9]{2}/gi).map(v=>{const x=parseInt(v,16)/255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4});return .2126*n[0]+.7152*n[1]+.0722*n[2]};const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);}
+test('core text/theme tokens meet WCAG AA normal-text contrast',()=>{for(const [fg,bg] of [['#303c32','#fffefa'],['#62695e','#e9edde'],['#526b50','#edf0e6'],['#ffffff','#526b50'],['#eef0e7','#212c24'],['#bac3b3','#30402e'],['#a4bb98','#30402e']]){assert.ok(css.includes(fg)||fg==='#ffffff');assert.ok(contrast(fg,bg)>=4.5,`${fg} on ${bg}: ${contrast(fg,bg)}`)}});
+test('keyboard focus and reduced-motion preference are defined',()=>{assert.ok(css.includes(':focus-visible'));assert.ok(css.includes('prefers-reduced-motion:reduce'));assert.ok(css.includes('min-height:44px'));});

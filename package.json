@@ -1,0 +1,71 @@
+{
+  "name": "still-mantra",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Private, offline mantra practice for web, mobile and Windows",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "npm run build && node scripts/serve.mjs dist",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/serve.mjs dist",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check src/app.js && node --check src/model.js && node --check src/storage.js",
+    "native:prepare": "npm run build && cap sync",
+    "android:add": "npm run build && cap add android",
+    "ios:add": "npm run build && cap add ios",
+    "android:open": "cap open android",
+    "ios:open": "cap open ios",
+    "windows:dev": "npm run build && electron .",
+    "windows:build": "npm run build && electron-builder --win nsis --publish never",
+    "windows:store": "npm run build && electron-builder --win appx --publish never",
+    "icons": "node scripts/icons.mjs",
+    "windows:test": "electron tests/electron-smoke.cjs"
+  },
+  "engines": {
+    "node": ">=22.21.1"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/core": "8.6.2",
+    "@capacitor/filesystem": "8.1.5",
+    "@capacitor/haptics": "8.0.2",
+    "@capacitor/ios": "8.6.2",
+    "@capacitor/preferences": "8.0.1",
+    "@capacitor/share": "8.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.2",
+    "electron": "45.3.1",
+    "electron-builder": "26.18.0",
+    "esbuild": "0.28.2"
+  },
+  "build": {
+    "appId": "org.still.mantra",
+    "productName": "Still",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon.ico"
+    },
+    "appx": {
+      "identityName": "org.still.mantra",
+      "publisher": "CN=REPLACE-WITH-PARTNER-CENTER-IDENTITY",
+      "publisherDisplayName": "REPLACE WITH VERIFIED PUBLISHER",
+      "applicationId": "Still",
+      "displayName": "Still",
+      "backgroundColor": "#f7f5ee"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

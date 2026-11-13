@@ -1,0 +1,18 @@
+  • electron-builder  version=26.18.0 os=10.0.26200
+  • loaded configuration  file=package.json ("build" field)
+  • author is missed in the package.json  appPackageFile=C:\Users\PrashantA\Documents\Codex\2026-11-13\files-pasted-by-the-user-here\outputs\still\package.json
+  • executing @electron/rebuild  electronVersion=45.3.1 arch=x64 buildFromSource=false workspaceRoot=C:\Users\PrashantA\Documents\Codex\2026-11-13\files-pasted-by-the-user-here\outputs\still projectDir=./ appDir=./
+  • installing native dependencies  arch=x64
+  • completed installing native dependencies
+  • packaging       platform=win32 arch=x64 electron=45.3.1 appOutDir=release\win-unpacked
+  • using custom unpacked Electron distribution  electronDist=node_modules\electron\dist
+  • copying unpacked Electron  source=C:\Users\PrashantA\Documents\Codex\2026-11-13\files-pasted-by-the-user-here\outputs\still\node_modules\electron\dist destination=C:\Users\PrashantA\Documents\Codex\2026-11-13\files-pasted-by-the-user-here\outputs\still\release\win-unpacked
+  • searching for node modules  pm=npm searchDir=C:\Users\PrashantA\Documents\Codex\2026-11-13\files-pasted-by-the-user-here\outputs\still
+  • duplicate dependency references  dependencies=["@capacitor/core@8.6.2","@capacitor/core@8.6.2","@capacitor/core@8.6.2","@capacitor/core@8.6.2","@capacitor/core@8.6.2","@capacitor/core@8.6.2"]
+  • updating asar integrity executable resource  executablePath=release\win-unpacked\Still.exe
+  • no code signing certificate configured, signing is skipped  path=release\win-unpacked\Still.exe
+  • building        target=nsis file=release\Still Setup 1.0.0.exe archs=x64 oneClick=false perMachine=false
+  • no code signing certificate configured, signing is skipped  path=C:\Users\PRASHA~1\AppData\Local\Temp\t-kMYivf\elevate-staging-1\resources\elevate.exe
+  • no code signing certificate configured, signing is skipped  path=release\Still Setup 1.0.0.__uninstaller.exe
+  • no code signing certificate configured, signing is skipped  path=release\Still Setup 1.0.0.exe
+  • building block map  blockMapFile=release\Still Setup 1.0.0.exe.blockmap

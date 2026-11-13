@@ -1,0 +1,12 @@
+import {writeFile} from 'node:fs/promises';import zlib from 'node:zlib';
+const crc=b=>{let c=0xffffffff;for(const x of b){c^=x;for(let i=0;i<8;i++)c=(c>>>1)^((c&1)?0xedb88320:0);}return (c^0xffffffff)>>>0;};
+const chunk=(t,d)=>{const type=Buffer.from(t),n=Buffer.alloc(4),c=Buffer.alloc(4);n.writeUInt32BE(d.length);c.writeUInt32BE(crc(Buffer.concat([type,d])));return Buffer.concat([n,type,d,c]);};
+function png(n){const raw=Buffer.alloc(n*(n*4+1));for(let y=0;y<n;y++)for(let x=0;x<n;x++){const X=x/n,Y=y/n;let ink=false;for(const [cx,cy,rx,ry] of [[.5,.46,.13,.23],[.36,.56,.16,.21],[.64,.56,.16,.21]]){const v=((X-cx)/rx)**2+((Y-cy)/ry)**2;if(v>.86&&v<1.08&&Y<.73)ink=true;}if(Math.abs(Y-(.75-.4*(X-.5)**2))<.012&&X>.24&&X<.76)ink=true;const i=y*(n*4+1)+1+x*4;raw[i]=ink?83:229;raw[i+1]=ink?105:234;raw[i+2]=ink?79:223;raw[i+3]=255;}const h=Buffer.alloc(13);h.writeUInt32BE(n);h.writeUInt32BE(n,4);h[8]=8;h[9]=6;return Buffer.concat([Buffer.from([137,80,78,71,13,10,26,10]),chunk('IHDR',h),chunk('IDAT',zlib.deflateSync(raw)),chunk('IEND',Buffer.alloc(0))]);}
+for(const n of [192,512,1024])await writeFile(`public/icon-${n}.png`,png(n));const image=png(256),h=Buffer.alloc(22);h.writeUInt16LE(1,2);h.writeUInt16LE(1,4);h.writeUInt16LE(1,10);h.writeUInt16LE(32,12);h.writeUInt32LE(image.length,14);h.writeUInt32LE(22,18);await writeFile('public/icon.ico',Buffer.concat([h,image]));console.log('Icons generated');
+
+// Native artwork uses the same source geometry as the web icons.
+const {readdir,copyFile}=await import('node:fs/promises');
+for(const [density,n] of [['mdpi',48],['hdpi',72],['xhdpi',96],['xxhdpi',144],['xxxhdpi',192]])for(const file of ['ic_launcher.png','ic_launcher_round.png','ic_launcher_foreground.png'])await writeFile(`android/app/src/main/res/mipmap-${density}/${file}`,png(file.includes('foreground')?Math.round(n*2.25):n));
+await copyFile('public/icon-1024.png','ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png');
+for(const file of await readdir('ios/App/App/Assets.xcassets/Splash.imageset'))if(file.endsWith('.png'))await writeFile('ios/App/App/Assets.xcassets/Splash.imageset/'+file,png(1024));
+for(const dir of await readdir('android/app/src/main/res'))if(dir.startsWith('drawable')&&!dir.endsWith('v24')){const folder='android/app/src/main/res/'+dir;for(const file of await readdir(folder))if(file==='splash.png')await writeFile(folder+'/'+file,png(512));}
